@@ -1,7 +1,6 @@
 import { useCallback, useState } from "react";
 import { Button } from "@nextui-org/react";
 import { NextPageWithLayout } from "../types/Layout";
-import { useWeb3 } from "@3rdweb/hooks";
 import BaseContainer from "../components/BaseContainer";
 import ShadowCard from "../components/ShadowCard";
 import CenterComponent from "../components/CenterComponent";
@@ -20,7 +19,6 @@ interface RecoveryPageFormProps {
 }
 
 const RecoveryPage: NextPageWithLayout = () => {
-  const { address, error, connectWallet } = useWeb3();
   const [loading, setLoading] = useState(false);
 
   const {
