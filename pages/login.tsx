@@ -69,7 +69,7 @@ const LoginPage: NextPageWithLayout = () => {
           <ShadowCard>
             <BrandHeader />
 
-            <div className="mt-6 px-2 py-4">
+            <div className="mt-6 p-3 pt-0">
               <PrimaryHeader title="Login" />
               <div className="flex flex-col">
                 <button onClick={onConnectWallet}>Connect Wallet</button>
@@ -88,7 +88,7 @@ const LoginPage: NextPageWithLayout = () => {
                     {...register("email")}
                   />
 
-                  <Spacer y={1} />
+                  <Spacer y={0.5} />
 
                   <Input.Password
                     clearable
