@@ -16,8 +16,8 @@ import { toast } from "react-toastify";
 import Image from "next/image";
 import Link from "next/link";
 import useFirebaseUser from "../hooks/useFirebaseUser";
-import { useRouter } from "next/router";
 import { collection, getDocs, query, where } from "firebase/firestore";
+import Router from "next/router";
 
 interface LoginPageFormProps {
   email: string;
@@ -27,7 +27,6 @@ interface LoginPageFormProps {
 const LoginPage: NextPageWithLayout = () => {
   const { address, error, connectWallet } = useWeb3();
   const firebaseUser = useFirebaseUser();
-  const router = useRouter();
 
   const onConnectWallet = useCallback(() => {
     connectWallet("injected");
@@ -73,7 +72,7 @@ const LoginPage: NextPageWithLayout = () => {
     const timeoutRef = setTimeout(async () => {
       try {
         if (firebaseUser) {
-          router.push("/dashboard");
+          Router.push("/dashboard");
           return;
         }
 
@@ -94,7 +93,7 @@ const LoginPage: NextPageWithLayout = () => {
 
           // TODO: Store User data in global store.
           console.log(address);
-          router.push("/dashboard");
+          Router.push("/dashboard");
           return;
         }
       } catch (err) {
@@ -105,7 +104,7 @@ const LoginPage: NextPageWithLayout = () => {
     return () => {
       clearTimeout(timeoutRef);
     };
-  }, [firebaseUser, address, router]);
+  }, [firebaseUser, address]);
 
   return (
     <BaseContainer>
