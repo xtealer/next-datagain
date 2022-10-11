@@ -8,26 +8,19 @@ import CenterComponent from "../components/CenterComponent";
 import PrimaryHeader from "../components/headers/PrimaryHeader";
 import BrandHeader from "../components/BrandHeader";
 import { Input, Spacer } from "@nextui-org/react";
-import UnLockIcon from "../components/icons/UnLockIcon";
-import LockIcon from "../components/icons/LockIcon";
+
 import { useForm } from "react-hook-form";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { sendPasswordResetEmail } from "firebase/auth";
 import { toast } from "react-toastify";
-import Image from "next/image";
 import Link from "next/link";
 
-interface LoginPageFormProps {
+interface RecoveryPageFormProps {
   email: string;
   password: string;
 }
 
-const LoginPage: NextPageWithLayout = () => {
+const RecoveryPage: NextPageWithLayout = () => {
   const { address, error, connectWallet } = useWeb3();
-
-  const onConnectWallet = useCallback(() => {
-    connectWallet("injected");
-  }, [connectWallet]);
-
   const [loading, setLoading] = useState(false);
 
   const {
@@ -35,9 +28,9 @@ const LoginPage: NextPageWithLayout = () => {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<LoginPageFormProps>();
+  } = useForm<RecoveryPageFormProps>();
   const onSubmit = useCallback(
-    async ({ email, password }: LoginPageFormProps) => {
+    async ({ email, password }: RecoveryPageFormProps) => {
       if (loading) {
         return;
       }
@@ -52,7 +45,7 @@ const LoginPage: NextPageWithLayout = () => {
       try {
         const firebaseAuth = (await import("../helpers/initFirebase"))
           .firebaseAuth;
-        await signInWithEmailAndPassword(firebaseAuth, email, password);
+        await sendPasswordResetEmail(firebaseAuth, email);
         toast.success("Logged in succesfully!");
       } catch (err) {
         console.log("login:signInWithEmailAndPassword:err", err);
@@ -69,44 +62,11 @@ const LoginPage: NextPageWithLayout = () => {
       <CenterComponent mode="col">
         <div className="w-full min-h-min max-w-[500px] flex flex-col p-4">
           <ShadowCard>
-            <BrandHeader />
+            <BrandHeader title="Help to recover your account, if it exists we will sent instructions to get back into it." />
 
             <div className="mt-6 p-3 pt-0">
-              <PrimaryHeader title="Login" />
-              <div className="flex flex-col mt-6">
-                <Button
-                  onClick={onConnectWallet}
-                  className="w-full flex bg-black"
-                  icon={
-                    <Image
-                      src="/images/metamask-icon.png"
-                      width={26}
-                      height={26}
-                      alt="metamask-icon"
-                    />
-                  }
-                >
-                  <span className="font-bold flex-1">MetaMask</span>
-                </Button>
-                <Spacer y={0.5} />
-                <Button
-                  className="w-full bg-[#4285f4]"
-                  icon={
-                    <Image
-                      src="/images/google-icon.png"
-                      width={26}
-                      height={26}
-                      alt="google-icon"
-                    />
-                  }
-                >
-                  <span className="font-bold flex-1">Google</span>
-                </Button>
-
-                <Spacer y={0.5} />
-
-                <p className="font-bold text-center w-full mt-6">Or</p>
-
+              <PrimaryHeader title="Account Recovery" />
+              <div className="flex flex-col mt-3">
                 <form
                   className="flex flex-col mt-4"
                   onSubmit={handleSubmit(onSubmit)}
@@ -121,32 +81,18 @@ const LoginPage: NextPageWithLayout = () => {
                     {...register("email")}
                   />
 
-                  <Spacer y={0.5} />
-
-                  <Input.Password
-                    clearable
-                    label="Password"
-                    placeholder="Password"
-                    initialValue=""
-                    type="password"
-                    visibleIcon={<UnLockIcon fill="currentColor" />}
-                    hiddenIcon={<LockIcon fill="currentColor" />}
-                    required
-                    {...register("password")}
-                  />
-
                   <Spacer y={2} />
 
                   <Button className="w-full bg-app-green" type="submit">
-                    Signin
+                    Submit
                   </Button>
 
                   <Spacer y={0.5} />
 
-                  <Link href="/recovery" passHref>
+                  <Link href="/login" passHref>
                     <a>
                       <Button className="w-full" color="warning" bordered>
-                        Help? Account Recovery
+                        Go Back
                       </Button>
                     </a>
                   </Link>
@@ -160,8 +106,8 @@ const LoginPage: NextPageWithLayout = () => {
   );
 };
 
-export default LoginPage;
+export default RecoveryPage;
 
-// LoginPage.getLayout = function getLayout(page: ReactElement) {
+// RecoveryPage.getLayout = function getLayout(page: ReactElement) {
 //   return <MainLayout>{page}</MainLayout>;
 // };
