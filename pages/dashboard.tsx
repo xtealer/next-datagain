@@ -64,6 +64,7 @@ const RecoveryPage: NextPageWithLayout = () => {
 
             <div className="mt-6 p-3 pt-0">
               <PrimaryHeader title="Account Recovery" />
+              <p></p>
               <div className="flex flex-col mt-3">
                 <form
                   className="flex flex-col mt-4"
