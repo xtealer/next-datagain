@@ -13,7 +13,6 @@ import LockIcon from "../components/icons/LockIcon";
 import { useForm } from "react-hook-form";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { toast } from "react-toastify";
-import dynamic from "next/dynamic";
 
 interface LoginPageFormProps {
   email: string;
@@ -37,6 +36,10 @@ const LoginPage: NextPageWithLayout = () => {
   } = useForm<LoginPageFormProps>();
   const onSubmit = useCallback(
     async ({ email, password }: LoginPageFormProps) => {
+      if (loading) {
+        return;
+      }
+
       if (password.length < 8) {
         toast.error("Invalid password format.");
         return;
@@ -56,7 +59,7 @@ const LoginPage: NextPageWithLayout = () => {
 
       setLoading(false);
     },
-    []
+    [loading]
   );
 
   return (
@@ -66,12 +69,15 @@ const LoginPage: NextPageWithLayout = () => {
           <ShadowCard>
             <BrandHeader />
 
-            <div className="mt-6">
+            <div className="mt-6 px-2 py-4">
               <PrimaryHeader title="Login" />
               <div className="flex flex-col">
                 <button onClick={onConnectWallet}>Connect Wallet</button>
 
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <form
+                  className="flex flex-col"
+                  onSubmit={handleSubmit(onSubmit)}
+                >
                   <Input
                     clearable
                     label="Email"
@@ -96,7 +102,9 @@ const LoginPage: NextPageWithLayout = () => {
                     {...register("password")}
                   />
 
-                  <Button color="primary" type="submit">
+                  <Spacer y={2} />
+
+                  <Button className="w-full bg-app-green" type="submit">
                     Submit
                   </Button>
                 </form>
