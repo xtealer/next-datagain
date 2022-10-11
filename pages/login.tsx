@@ -12,8 +12,8 @@ import UnLockIcon from "../components/icons/UnLockIcon";
 import LockIcon from "../components/icons/LockIcon";
 import { useForm } from "react-hook-form";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { firebaseAuth } from "../helpers/initFirebase";
 import { toast } from "react-toastify";
+import dynamic from "next/dynamic";
 
 interface LoginPageFormProps {
   email: string;
@@ -45,6 +45,8 @@ const LoginPage: NextPageWithLayout = () => {
       setLoading(true);
 
       try {
+        const firebaseAuth = (await import("../helpers/initFirebase"))
+          .firebaseAuth;
         await signInWithEmailAndPassword(firebaseAuth, email, password);
         toast.success("Logged in succesfully!");
       } catch (err) {
@@ -94,7 +96,9 @@ const LoginPage: NextPageWithLayout = () => {
                     {...register("password")}
                   />
 
-                  <Button type="submit" />
+                  <Button color="primary" type="submit">
+                    Submit
+                  </Button>
                 </form>
               </div>
             </div>
