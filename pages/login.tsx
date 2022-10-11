@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Button } from "@nextui-org/react";
 import { NextPageWithLayout } from "../types/Layout";
 import { useWeb3 } from "@3rdweb/hooks";
@@ -15,6 +15,9 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { toast } from "react-toastify";
 import Image from "next/image";
 import Link from "next/link";
+import useFirebaseUser from "../hooks/useFirebaseUser";
+import { useRouter } from "next/router";
+import { collection, getDocs, query, where } from "firebase/firestore";
 
 interface LoginPageFormProps {
   email: string;
@@ -23,6 +26,8 @@ interface LoginPageFormProps {
 
 const LoginPage: NextPageWithLayout = () => {
   const { address, error, connectWallet } = useWeb3();
+  const firebaseUser = useFirebaseUser();
+  const router = useRouter();
 
   const onConnectWallet = useCallback(() => {
     connectWallet("injected");
@@ -63,6 +68,44 @@ const LoginPage: NextPageWithLayout = () => {
     },
     [loading]
   );
+
+  useEffect(() => {
+    const timeoutRef = setTimeout(async () => {
+      try {
+        if (firebaseUser) {
+          router.push("/dashboard");
+          return;
+        }
+
+        if (typeof address === "string") {
+          const firebaseFirestore = (await import("../helpers/initFirebase"))
+            .firebaseFirestore;
+
+          const collectionRef = collection(firebaseFirestore, "users");
+          const queryRef = query(
+            collectionRef,
+            where("metamaskId", "==", address)
+          );
+          const querySnap = await getDocs(queryRef);
+
+          if (querySnap.docs.length === 0) {
+            return;
+          }
+
+          // TODO: Store User data in global store.
+          console.log(address);
+          router.push("/dashboard");
+          return;
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }, 2500);
+
+    return () => {
+      clearTimeout(timeoutRef);
+    };
+  }, [firebaseUser, address, router]);
 
   return (
     <BaseContainer>
