@@ -4,6 +4,7 @@ import { NextUIProvider } from "@nextui-org/react";
 import Head from "next/head";
 
 import { AppPropsWithLayout } from "../types/Layout";
+import useEmitAppStartedEvent from "../useEmitAppStartedEvent";
 
 const supportedChainIds = [1, 3, 4, 5, 2018, 61, 63, 6, 212];
 const connectors = {
@@ -13,6 +14,7 @@ const connectors = {
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   // Use the layout defined at the page level, if available
   const getLayout = Component.getLayout ?? ((page) => page);
+  useEmitAppStartedEvent();
 
   return (
     // @ts-ignore

@@ -14,7 +14,7 @@ const BrandHeader: FC = () => {
       </div>
 
       <p className="text-black text-center">
-        don't waste your data... start earning now with it!
+        don&apos;t waste your data... start earning now with it!
       </p>
     </div>
   );
