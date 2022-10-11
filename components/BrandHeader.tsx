@@ -1,7 +1,13 @@
 import Image from "next/image";
 import { FC } from "react";
 
-const BrandHeader: FC = () => {
+interface BrandHeaderProps {
+  title?: string;
+}
+
+const BrandHeader: FC<BrandHeaderProps> = ({
+  title = "don't waste your data... start earning now with it!",
+}) => {
   return (
     <div>
       <div className="max-w-[200px] mx-auto">
@@ -13,9 +19,7 @@ const BrandHeader: FC = () => {
         />
       </div>
 
-      <p className="text-black text-center">
-        don&apos;t waste your data... start earning now with it!
-      </p>
+      <p className="text-black text-center">{title}</p>
     </div>
   );
 };

@@ -16,13 +16,12 @@ const Home: NextPageWithLayout = () => {
               <BrandHeader />
 
               <div className=" mt-12 p-3 pt-0">
-                <Link href="/login">
-                  <Button
-                    className="w-full bg-app-green font-bold"
-                    type="submit"
-                  >
-                    Get Started
-                  </Button>
+                <Link href="/login" passHref>
+                  <a>
+                    <Button className="w-full bg-app-green font-bold">
+                      Get Started
+                    </Button>
+                  </a>
                 </Link>
               </div>
             </div>
