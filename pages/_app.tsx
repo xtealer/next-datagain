@@ -5,6 +5,7 @@ import Head from "next/head";
 
 import { AppPropsWithLayout } from "../types/Layout";
 import useEmitAppStartedEvent from "../useEmitAppStartedEvent";
+import { ToastContainer } from "react-toastify";
 
 const supportedChainIds = [1, 3, 4, 5, 2018, 61, 63, 6, 212];
 const connectors = {
@@ -31,6 +32,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         </Head>
 
         {getLayout(<Component {...pageProps} />)}
+        <ToastContainer />
       </NextUIProvider>
     </ThirdwebWeb3Provider>
   );
