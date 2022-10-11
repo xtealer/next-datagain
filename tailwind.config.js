@@ -20,6 +20,7 @@ module.exports = {
       "gray-dark": "#273444",
       gray: "#8492a6",
       "gray-light": "#d3dce6",
+      "app-green": "#45BF7F",
     },
     fontFamily: {
       sans: ["Graphik", "sans-serif"],
@@ -36,5 +37,9 @@ module.exports = {
     },
   },
   plugins: [],
-  content: ["./public/**/*.html", "./src/**/*.{js,jsx,ts,tsx,vue}"],
+  content: [
+    "./public/**/*.html",
+    "./components/**/*.{js,jsx,ts,tsx,vue}",
+    "./layouts/**/*.{js,jsx,ts,tsx,vue}",
+  ],
 };

@@ -9,7 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@3rdweb/hooks": "^1.9.2",
+    "@3rdweb/react": "^1.9.3",
+    "@3rdweb/sdk": "^1.42.1",
     "@nextui-org/react": "^1.0.0-beta.10",
+    "cssnano": "^5.1.13",
     "next": "12.3.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
