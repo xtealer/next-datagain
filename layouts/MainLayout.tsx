@@ -3,6 +3,7 @@ import { Navbar, Text } from "@nextui-org/react";
 import Image from "next/image";
 import Link from "next/link";
 import { FC, ReactNode } from "react";
+import { Heart } from "react-iconly";
 import useSessionUtils from "../hooks/useSessionUtils";
 import useUserData from "../hooks/useUserData";
 
@@ -28,8 +29,14 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
         </Navbar.Brand>
         <Navbar.Content>
           {user ? (
-            <Text className="font-bold">
-              {user?.firstName} {user?.lastName}
+            <Text className="font-bold flex gap-4 justify-center items-center">
+              <span className="text-app-green flex gap-1 justify-center items-center">
+                <Heart filled />
+                <span className="font-bold">{user?.points ?? 0}</span>
+              </span>
+              <span>
+                {user?.firstName} {user?.lastName}
+              </span>
             </Text>
           ) : (
             <Text className="font-bold">...</Text>

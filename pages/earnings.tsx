@@ -16,7 +16,7 @@ import { UserFirestoreData } from "../types/User";
 import SecondaryLayout from "../layouts/SecondaryLayout";
 import Router from "next/router";
 
-interface SharingPageFormProps {
+interface EarningsPageFormProps {
   firstName: string;
   lastName: string;
   username: string;
@@ -25,7 +25,7 @@ interface SharingPageFormProps {
   points: number;
 }
 
-const SharingPage: NextPageWithLayout = () => {
+const EarningsPage: NextPageWithLayout = () => {
   const user: UserFirestoreData = useGlobalStore((state: any) => state.user);
   const [loading, setLoading] = useState(false);
 
@@ -35,14 +35,14 @@ const SharingPage: NextPageWithLayout = () => {
     watch,
     setValue,
     formState: { errors },
-  } = useForm<SharingPageFormProps>();
+  } = useForm<EarningsPageFormProps>();
   const onSubmit = useCallback(
     async ({
       firstName,
       lastName,
       metamaskId,
       points = 0,
-    }: SharingPageFormProps) => {
+    }: EarningsPageFormProps) => {
       if (loading) {
         return;
       }
@@ -81,7 +81,7 @@ const SharingPage: NextPageWithLayout = () => {
         );
         await setDoc(rewardsDocRef, newRewardData);
 
-        toast.success("Sharing Preferences saved!");
+        toast.success("Survey saved!");
         Router.push("/dashboard");
       } catch (err) {
         console.log("login:signInWithEmailAndPassword:err", err);
@@ -98,7 +98,7 @@ const SharingPage: NextPageWithLayout = () => {
       <CenterComponent mode="col">
         <div className="w-full min-h-min max-w-[500px] flex flex-col p-4">
           <div className="mt-6 p-3 pt-0">
-            <PrimaryHeader title="Sharing Preferences" />
+            <PrimaryHeader title="Points Earned" />
             <div className="flex flex-col mt-6">
               <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
                 <Input
@@ -152,7 +152,7 @@ const SharingPage: NextPageWithLayout = () => {
                 <Spacer y={2} />
 
                 <Button className="w-full bg-app-green" type="submit">
-                  Update
+                  Submit
                 </Button>
               </form>
             </div>
@@ -163,8 +163,8 @@ const SharingPage: NextPageWithLayout = () => {
   );
 };
 
-export default SharingPage;
+export default EarningsPage;
 
-SharingPage.getLayout = function getLayout(page: ReactElement) {
+EarningsPage.getLayout = function getLayout(page: ReactElement) {
   return <SecondaryLayout>{page}</SecondaryLayout>;
 };

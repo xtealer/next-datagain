@@ -60,15 +60,27 @@ const RecoveryPage: NextPageWithLayout = () => {
         <div className="w-full min-h-min max-w-[500px] flex flex-col p-4">
           <div className="mt-6 p-3 pt-0">
             <div className="flex flex-col mt-3">
-              <Button className="w-full bg-app-green" type="submit">
-                Submit
-              </Button>
-
-              <Spacer y={0.5} />
-
-              <Link href="/login" passHref>
+              <Link href="/surveys" passHref>
                 <a>
-                  <Button className="w-full bg-black font-bold">Go Back</Button>
+                  <button className="w-full text-black border-black border-2 opacity-90 rounded font-bold text-lg p-2 h-[50px] mt-4">
+                    Surveys
+                  </button>
+                </a>
+              </Link>
+
+              <Link href="/earnings" passHref>
+                <a>
+                  <button className="w-full text-black border-black border-2 opacity-90 rounded font-bold text-lg p-2 h-[50px] mt-4">
+                    Points Earned
+                  </button>
+                </a>
+              </Link>
+
+              <Link href="/sharing" passHref>
+                <a>
+                  <button className="w-full text-black border-black border-2 opacity-90 rounded font-bold text-lg p-2 h-[50px] mt-4">
+                    Sharing Preferences
+                  </button>
                 </a>
               </Link>
             </div>
