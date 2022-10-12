@@ -58,15 +58,16 @@ const SurveysPage: NextPageWithLayout = () => {
           Collections.REWARDS
         );
 
-        const newRewardData = {
-          created: new Date(),
-          action: RewardAction.UPDATE,
-          amount: 5,
-          userId: user.documentId,
-        } as Reward;
-
         const userDocRef = doc(collectionRef, user?.documentId);
         const rewardsDocRef = doc(rewardsCollectionRef);
+
+        const newRewardData = {
+          created: new Date(),
+          action: RewardAction.CREATE,
+          amount: 5,
+          userId: user?.documentId,
+          documentId: rewardsDocRef.id,
+        } as Reward;
 
         await setDoc(
           userDocRef,

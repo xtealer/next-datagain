@@ -8,4 +8,5 @@ export interface Reward {
   amount: number;
   action: RewardAction;
   userId: string;
+  documentId: string;
 }

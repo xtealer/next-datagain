@@ -59,15 +59,16 @@ const SignupPage: NextPageWithLayout = () => {
           Collections.REWARDS
         );
 
+        const userDocRef = doc(collectionRef, firebaseUser?.uid);
+        const rewardsDocRef = doc(rewardsCollectionRef);
+
         const newRewardData = {
           created: new Date(),
           action: RewardAction.CREATE,
           amount: 20,
           userId: firebaseUser?.uid,
+          documentId: rewardsDocRef.id,
         } as Reward;
-
-        const userDocRef = doc(collectionRef, firebaseUser?.uid);
-        const rewardsDocRef = doc(rewardsCollectionRef);
 
         await setDoc(
           userDocRef,
