@@ -17,12 +17,13 @@ import SecondaryLayout from "../layouts/SecondaryLayout";
 import Router from "next/router";
 import useFirebaseUser from "../hooks/useFirebaseUser";
 
-interface SignupPageFormProps {
+interface ProfilePageFormProps {
   firstName: string;
   lastName: string;
   username: string;
   metamaskId: string;
   password: string;
+  points: number;
 }
 
 const SignupPage: NextPageWithLayout = () => {
@@ -35,9 +36,14 @@ const SignupPage: NextPageWithLayout = () => {
     watch,
     setValue,
     formState: { errors },
-  } = useForm<SignupPageFormProps>();
+  } = useForm<ProfilePageFormProps>();
   const onSubmit = useCallback(
-    async ({ firstName, lastName, metamaskId }: SignupPageFormProps) => {
+    async ({
+      firstName,
+      lastName,
+      metamaskId,
+      points = 0,
+    }: ProfilePageFormProps) => {
       if (loading) {
         return;
       }
@@ -53,22 +59,32 @@ const SignupPage: NextPageWithLayout = () => {
           Collections.REWARDS
         );
 
-        const userDocRef = doc(collectionRef, firebaseUser?.uid as string);
+        const newRewardData = {
+          created: new Date(),
+          action: RewardAction.CREATE,
+          amount: 20,
+          userId: firebaseUser?.uid,
+        } as Reward;
+
+        const userDocRef = doc(collectionRef, firebaseUser?.uid);
         const rewardsDocRef = doc(rewardsCollectionRef);
 
         await setDoc(
           userDocRef,
-          { firstName, lastName, metamaskId, updated: new Date() },
+          {
+            firstName,
+            lastName,
+            metamaskId,
+            updated: new Date(),
+            created: new Date(),
+            email: firebaseUser?.email,
+            amount: points + newRewardData.amount,
+          },
           { merge: true }
         );
-        await setDoc(rewardsDocRef, {
-          created: new Date(),
-          action: RewardAction.UPDATE,
-          amount: 5,
-          userId: firebaseUser?.uid as string,
-        } as Reward);
+        await setDoc(rewardsDocRef, newRewardData);
 
-        toast.success("Changed saved!");
+        toast.success("Changes saved!");
         Router.push("/dashboard");
       } catch (err) {
         console.log("login:signInWithEmailAndPassword:err", err);
@@ -77,7 +93,7 @@ const SignupPage: NextPageWithLayout = () => {
 
       setLoading(false);
     },
-    [loading]
+    [firebaseUser?.email, firebaseUser?.uid, loading]
   );
 
   return (

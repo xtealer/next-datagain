@@ -27,7 +27,11 @@ export default () => {
           const docRef = doc(collectionRef, firebaseUser.uid);
           const docSnap = await getDoc(docRef);
           const docData = docSnap.data();
-          setUser(docData);
+          if (docData) {
+            setUser(docData);
+          } else {
+            Router.push("/signup");
+          }
           return;
         }
 

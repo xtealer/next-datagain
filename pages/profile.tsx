@@ -81,7 +81,7 @@ const ProfilePage: NextPageWithLayout = () => {
         );
         await setDoc(rewardsDocRef, newRewardData);
 
-        toast.success("Changed saved!");
+        toast.success("Changes saved!");
         Router.push("/dashboard");
       } catch (err) {
         console.log("login:signInWithEmailAndPassword:err", err);
