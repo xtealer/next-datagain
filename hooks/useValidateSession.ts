@@ -1,3 +1,4 @@
+import { Collections } from "./../types/Collections";
 /* eslint-disable import/no-anonymous-default-export */
 import { signInWithCustomToken } from "firebase/auth";
 import {
@@ -25,7 +26,7 @@ export default () => {
           .firebaseFirestore;
         const firebaseAuth = (await import("../helpers/initFirebase"))
           .firebaseAuth;
-        const collectionRef = collection(firebaseFirestore, "users");
+        const collectionRef = collection(firebaseFirestore, Collections.USERS);
 
         if (firebaseUser) {
           const docRef = doc(collectionRef, firebaseUser.uid);
@@ -46,6 +47,7 @@ export default () => {
           );
           const querySnap = await getDocs(queryRef);
 
+          console.log(querySnap.docs);
           if (querySnap.docs.length === 0) {
             return;
           }
@@ -58,6 +60,7 @@ export default () => {
             }),
             method: "POST",
           });
+          console.log(res);
           const resData = JSON.parse(await res.json());
 
           if (typeof resData?.token === "string") {

@@ -79,7 +79,7 @@ const SignupPage: NextPageWithLayout = () => {
             updated: new Date(),
             created: new Date(),
             email: firebaseUser?.email,
-            amount: points + newRewardData.amount,
+            points: points + newRewardData.amount,
           },
           { merge: true }
         );

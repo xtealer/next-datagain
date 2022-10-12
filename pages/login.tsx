@@ -76,7 +76,7 @@ const LoginPage: NextPageWithLayout = () => {
               <PrimaryHeader title="Login" />
               <div className="flex flex-col mt-6">
                 <Button
-                  onClick={onConnectWallet}
+                  onPress={onConnectWallet}
                   className="w-full flex bg-black"
                   icon={
                     <Image

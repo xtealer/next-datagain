@@ -76,7 +76,7 @@ const ProfilePage: NextPageWithLayout = () => {
             lastName,
             metamaskId,
             updated: new Date(),
-            amount: points + newRewardData.amount,
+            points: points + newRewardData.amount,
           },
           { merge: true }
         );
