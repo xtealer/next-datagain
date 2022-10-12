@@ -11,6 +11,7 @@ export interface UserFirestoreData {
   firstName: string;
   lastName: string;
   lastActivity: Date;
+  updated: Date;
   created: Date;
   points: number;
   sharingPreferences: Record<string, boolean>;

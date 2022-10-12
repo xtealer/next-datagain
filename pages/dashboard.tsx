@@ -59,39 +59,18 @@ const RecoveryPage: NextPageWithLayout = () => {
       <CenterComponent mode="col">
         <div className="w-full min-h-min max-w-[500px] flex flex-col p-4">
           <div className="mt-6 p-3 pt-0">
-            <PrimaryHeader title="Account Recovery" />
-            <p></p>
             <div className="flex flex-col mt-3">
-              <form
-                className="flex flex-col mt-4"
-                onSubmit={handleSubmit(onSubmit)}
-              >
-                <Input
-                  clearable
-                  label="Email"
-                  placeholder="Email"
-                  initialValue=""
-                  type="email"
-                  required
-                  {...register("email")}
-                />
+              <Button className="w-full bg-app-green" type="submit">
+                Submit
+              </Button>
 
-                <Spacer y={2} />
+              <Spacer y={0.5} />
 
-                <Button className="w-full bg-app-green" type="submit">
-                  Submit
-                </Button>
-
-                <Spacer y={0.5} />
-
-                <Link href="/login" passHref>
-                  <a>
-                    <Button className="w-full" color="warning" bordered>
-                      Go Back
-                    </Button>
-                  </a>
-                </Link>
-              </form>
+              <Link href="/login" passHref>
+                <a>
+                  <Button className="w-full bg-black font-bold">Go Back</Button>
+                </a>
+              </Link>
             </div>
           </div>
         </div>

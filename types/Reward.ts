@@ -7,4 +7,5 @@ export interface Reward {
   created: Date;
   amount: number;
   action: RewardAction;
+  userId: string;
 }

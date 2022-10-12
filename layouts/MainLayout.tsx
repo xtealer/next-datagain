@@ -1,4 +1,4 @@
-import { Button, Navbar, Text, Link as NextUILink } from "@nextui-org/react";
+import { Navbar, Text } from "@nextui-org/react";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -28,21 +28,45 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
         </Navbar.Brand>
         <Navbar.Content>
           {user ? (
-            <Text>
+            <Text className="font-bold">
               {user?.firstName} {user?.lastName}
             </Text>
           ) : (
-            <Text>...</Text>
+            <Text className="font-bold">...</Text>
           )}
         </Navbar.Content>
 
         <Navbar.Collapse>
-          {/* <NextUILink>
-            <Link color="inherit" href="">
-              Logout
-            </Link>
-          </NextUILink> */}
-          <NextUILink onClick={doLogout}>Logout</NextUILink>
+          <Link href="/dashboard" passHref>
+            <a>
+              <button className="w-full text-black border-black border-2 opacity-90 rounded font-bold text-lg p-2 h-[50px] mt-4">
+                Dashboard
+              </button>
+            </a>
+          </Link>
+
+          <Link href="/sharing" passHref>
+            <a>
+              <button className="w-full text-black border-black border-2 opacity-90 rounded font-bold text-lg p-2 h-[50px] mt-4">
+                Sharing Preferences
+              </button>
+            </a>
+          </Link>
+
+          <Link href="/profile" passHref className="h-full w-full">
+            <a>
+              <button className="w-full text-black border-black border-2 opacity-90 rounded font-bold text-lg p-2 h-[50px] mt-4">
+                Profile
+              </button>
+            </a>
+          </Link>
+
+          <button
+            className="w-full text-app-green border-app-green opacity-90 border-2 rounded font-bold text-lg p-2 h-[50px] mt-4"
+            onClick={doLogout}
+          >
+            Logout
+          </button>
         </Navbar.Collapse>
       </Navbar>
       <div className="flex-1 flex flex-col w-full overflow-auto">
