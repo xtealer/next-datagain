@@ -1,62 +1,78 @@
-import { useCallback, useState } from "react";
+import { ReactElement, useCallback, useState } from "react";
 import { Button } from "@nextui-org/react";
 import { NextPageWithLayout } from "../types/Layout";
-import { useWeb3 } from "@3rdweb/hooks";
 import BaseContainer from "../components/BaseContainer";
 import ShadowCard from "../components/ShadowCard";
 import CenterComponent from "../components/CenterComponent";
 import PrimaryHeader from "../components/headers/PrimaryHeader";
-import BrandHeader from "../components/BrandHeader";
 import { Input, Spacer } from "@nextui-org/react";
-import UnLockIcon from "../components/icons/UnLockIcon";
-import LockIcon from "../components/icons/LockIcon";
 import { useForm } from "react-hook-form";
-import { signInWithEmailAndPassword } from "firebase/auth";
 import { toast } from "react-toastify";
-import Image from "next/image";
-import Link from "next/link";
 
-interface LoginPageFormProps {
-  email: string;
+import { collection, doc, setDoc } from "firebase/firestore";
+import { Collections } from "../types/Collections";
+import { Reward, RewardAction } from "../types/Reward";
+
+import SecondaryLayout from "../layouts/SecondaryLayout";
+import Router from "next/router";
+import useFirebaseUser from "../hooks/useFirebaseUser";
+
+interface SignupPageFormProps {
+  firstName: string;
+  lastName: string;
+  username: string;
+  metamaskId: string;
   password: string;
 }
 
-const LoginPage: NextPageWithLayout = () => {
-  const { connectWallet } = useWeb3();
-
-  const onConnectWallet = useCallback(() => {
-    connectWallet("injected");
-  }, [connectWallet]);
-
+const SignupPage: NextPageWithLayout = () => {
+  const firebaseUser = useFirebaseUser();
   const [loading, setLoading] = useState(false);
 
   const {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
-  } = useForm<LoginPageFormProps>();
+  } = useForm<SignupPageFormProps>();
   const onSubmit = useCallback(
-    async ({ email, password }: LoginPageFormProps) => {
+    async ({ firstName, lastName, metamaskId }: SignupPageFormProps) => {
       if (loading) {
-        return;
-      }
-
-      if (password.length < 8) {
-        toast.error("Invalid password format.");
         return;
       }
 
       setLoading(true);
 
       try {
-        const firebaseAuth = (await import("../helpers/initFirebase"))
-          .firebaseAuth;
-        await signInWithEmailAndPassword(firebaseAuth, email, password);
-        toast.success("Logged in succesfully!");
+        const firebaseFirestore = (await import("../helpers/initFirebase"))
+          .firebaseFirestore;
+        const collectionRef = collection(firebaseFirestore, Collections.USERS);
+        const rewardsCollectionRef = collection(
+          firebaseFirestore,
+          Collections.REWARDS
+        );
+
+        const userDocRef = doc(collectionRef, firebaseUser?.uid as string);
+        const rewardsDocRef = doc(rewardsCollectionRef);
+
+        await setDoc(
+          userDocRef,
+          { firstName, lastName, metamaskId, updated: new Date() },
+          { merge: true }
+        );
+        await setDoc(rewardsDocRef, {
+          created: new Date(),
+          action: RewardAction.UPDATE,
+          amount: 5,
+          userId: firebaseUser?.uid as string,
+        } as Reward);
+
+        toast.success("Changed saved!");
+        Router.push("/dashboard");
       } catch (err) {
         console.log("login:signInWithEmailAndPassword:err", err);
-        toast.error("Something failed, verify your credentials and try again.");
+        toast.error("Could not save, try again later.");
       }
 
       setLoading(false);
@@ -69,84 +85,65 @@ const LoginPage: NextPageWithLayout = () => {
       <CenterComponent mode="col">
         <div className="w-full min-h-min max-w-[500px] flex flex-col p-4">
           <ShadowCard>
-            <BrandHeader />
-
             <div className="mt-6 p-3 pt-0">
-              <PrimaryHeader title="Login" />
+              <PrimaryHeader title="Profile" />
               <div className="flex flex-col mt-6">
-                <Button
-                  onClick={onConnectWallet}
-                  className="w-full flex bg-black"
-                  icon={
-                    <Image
-                      src="/images/metamask-icon.png"
-                      width={26}
-                      height={26}
-                      alt="metamask-icon"
-                    />
-                  }
-                >
-                  <span className="font-bold flex-1">MetaMask</span>
-                </Button>
-                <Spacer y={0.5} />
-                <Button
-                  className="w-full bg-[#4285f4]"
-                  icon={
-                    <Image
-                      src="/images/google-icon.png"
-                      width={26}
-                      height={26}
-                      alt="google-icon"
-                    />
-                  }
-                >
-                  <span className="font-bold flex-1">Google</span>
-                </Button>
-
-                <Spacer y={0.5} />
-
-                <p className="font-bold text-center w-full mt-6">Or</p>
-
                 <form
-                  className="flex flex-col mt-4"
+                  className="flex flex-col"
                   onSubmit={handleSubmit(onSubmit)}
                 >
+                  <Input
+                    clearable
+                    label="Firstname"
+                    placeholder="Firstname"
+                    initialValue=""
+                    required
+                    autoComplete="off"
+                    {...register("firstName")}
+                  />
+
+                  <Spacer y={0.5} />
+
+                  <Input
+                    clearable
+                    label="Lastname"
+                    placeholder="Lastlame"
+                    initialValue=""
+                    required
+                    autoComplete="off"
+                    {...register("lastName")}
+                  />
+
+                  <Spacer y={0.5} />
+
+                  <Input
+                    clearable
+                    label="Metamask Wallet"
+                    placeholder=""
+                    initialValue=""
+                    required
+                    autoComplete="off"
+                    {...register("metamaskId")}
+                  />
+
+                  <Spacer y={0.5} />
+
                   <Input
                     clearable
                     label="Email"
                     placeholder="Email"
                     initialValue=""
-                    type="email"
                     required
-                    {...register("email")}
-                  />
-
-                  <Spacer y={0.5} />
-
-                  <Input.Password
-                    clearable
-                    label="Password"
-                    placeholder="Password"
-                    initialValue=""
-                    type="password"
-                    visibleIcon={<UnLockIcon fill="currentColor" />}
-                    hiddenIcon={<LockIcon fill="currentColor" />}
-                    required
-                    {...register("password")}
+                    readOnly
+                    autoComplete="off"
+                    className="cursor-none select-none"
+                    {...register("username")}
                   />
 
                   <Spacer y={2} />
 
                   <Button className="w-full bg-app-green" type="submit">
-                    Signin
-                  </Button>
-
-                  <Spacer y={0.5} />
-
-                  <Button className="w-full" color="warning" bordered>
-                    <Link href="/recovery" passHref>
-                      <a className="h-full w-full">Help? Account Recovery</a>
-                    </Link>
+                    Save
                   </Button>
                 </form>
               </div>
@@ -158,8 +155,8 @@ const LoginPage: NextPageWithLayout = () => {
   );
 };
 
-export default LoginPage;
+export default SignupPage;
 
-// LoginPage.getLayout = function getLayout(page: ReactElement) {
-//   return <MainLayout>{page}</MainLayout>;
-// };
+SignupPage.getLayout = function getLayout(page: ReactElement) {
+  return <SecondaryLayout>{page}</SecondaryLayout>;
+};

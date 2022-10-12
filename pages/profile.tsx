@@ -162,7 +162,7 @@ const ProfilePage: NextPageWithLayout = () => {
                   <Spacer y={2} />
 
                   <Button className="w-full bg-app-green" type="submit">
-                    Signin
+                    Save
                   </Button>
                 </form>
               </div>
