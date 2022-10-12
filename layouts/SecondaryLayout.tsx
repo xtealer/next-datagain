@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { FC, ReactNode, useCallback } from "react";
 import useGlobalStore from "../store/useGlobalStore";
-import { ArrowLeft } from "react-iconly";
+import { ArrowLeft, Heart } from "react-iconly";
 
 export interface SecondaryLayoutProps {
   children?: ReactNode | ReactNode[];
@@ -34,8 +34,14 @@ const SecondaryLayout: FC<SecondaryLayoutProps> = ({ children }) => {
         </Navbar.Brand>
         <Navbar.Content>
           {user ? (
-            <Text className="font-bold">
-              {user?.firstName} {user?.lastName}
+            <Text className="font-bold flex gap-4 justify-center items-center">
+              <span className="text-app-green flex gap-1 justify-center items-center">
+                <Heart filled />
+                <span className="font-bold">{user?.points ?? 0}</span>
+              </span>
+              <span>
+                {user?.firstName} {user?.lastName}
+              </span>
             </Text>
           ) : (
             <Text className="font-bold">...</Text>
