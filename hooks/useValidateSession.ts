@@ -1,4 +1,5 @@
 /* eslint-disable import/no-anonymous-default-export */
+import { signInWithCustomToken } from "firebase/auth";
 import {
   collection,
   doc,
@@ -10,6 +11,7 @@ import {
 import Router from "next/router";
 import { useEffect } from "react";
 import useGlobalStore from "../store/useGlobalStore";
+import { UserFirestoreData } from "../types/User";
 import useSessionUtils from "./useSessionUtils";
 
 export default () => {
@@ -21,6 +23,8 @@ export default () => {
       try {
         const firebaseFirestore = (await import("../helpers/initFirebase"))
           .firebaseFirestore;
+        const firebaseAuth = (await import("../helpers/initFirebase"))
+          .firebaseAuth;
         const collectionRef = collection(firebaseFirestore, "users");
 
         if (firebaseUser) {
@@ -48,8 +52,18 @@ export default () => {
 
           const userDataFound = querySnap.docs[0].data();
           setUser(userDataFound);
-          // TODO: Get token for login.
-          Router.push("/dashboard");
+          const res = await fetch("/api/getUserTokenId", {
+            body: JSON.stringify({
+              id: (userDataFound as UserFirestoreData)?.documentId,
+            }),
+            method: "POST",
+          });
+          const resData = JSON.parse(await res.json());
+
+          if (typeof resData?.token === "string") {
+            await signInWithCustomToken(firebaseAuth, resData?.token);
+          }
+
           return;
         }
       } catch (err) {

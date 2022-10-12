@@ -52,6 +52,7 @@ const LoginPage: NextPageWithLayout = () => {
       try {
         const firebaseAuth = (await import("../helpers/initFirebase"))
           .firebaseAuth;
+
         await signInWithEmailAndPassword(firebaseAuth, email, password);
         toast.success("Logged in succesfully!");
       } catch (err) {
