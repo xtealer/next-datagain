@@ -22,6 +22,7 @@ interface ProfilePageFormProps {
   username: string;
   metamaskId: string;
   password: string;
+  points: number;
 }
 
 const ProfilePage: NextPageWithLayout = () => {
@@ -36,7 +37,12 @@ const ProfilePage: NextPageWithLayout = () => {
     formState: { errors },
   } = useForm<ProfilePageFormProps>();
   const onSubmit = useCallback(
-    async ({ firstName, lastName, metamaskId }: ProfilePageFormProps) => {
+    async ({
+      firstName,
+      lastName,
+      metamaskId,
+      points = 0,
+    }: ProfilePageFormProps) => {
       if (loading) {
         return;
       }
@@ -52,20 +58,28 @@ const ProfilePage: NextPageWithLayout = () => {
           Collections.REWARDS
         );
 
+        const newRewardData = {
+          created: new Date(),
+          action: RewardAction.UPDATE,
+          amount: 5,
+          userId: user.documentId,
+        } as Reward;
+
         const userDocRef = doc(collectionRef, user?.documentId);
         const rewardsDocRef = doc(rewardsCollectionRef);
 
         await setDoc(
           userDocRef,
-          { firstName, lastName, metamaskId, updated: new Date() },
+          {
+            firstName,
+            lastName,
+            metamaskId,
+            updated: new Date(),
+            amount: points + newRewardData.amount,
+          },
           { merge: true }
         );
-        await setDoc(rewardsDocRef, {
-          created: new Date(),
-          action: RewardAction.UPDATE,
-          amount: 5,
-          userId: user.documentId,
-        } as Reward);
+        await setDoc(rewardsDocRef, newRewardData);
 
         toast.success("Changed saved!");
         Router.push("/dashboard");
@@ -80,7 +94,13 @@ const ProfilePage: NextPageWithLayout = () => {
   );
 
   useEffect(() => {
-    const { firstName, lastName, metamaskId, email } = user ?? {};
+    const {
+      firstName,
+      lastName,
+      metamaskId,
+      email,
+      points = 0,
+    } = (user ?? {}) as UserFirestoreData;
 
     if (typeof firstName === "string") {
       setValue("firstName", firstName);
@@ -96,6 +116,10 @@ const ProfilePage: NextPageWithLayout = () => {
 
     if (typeof email === "string") {
       setValue("username", email);
+    }
+
+    if (typeof points === "string") {
+      setValue("points", points);
     }
   }, [setValue, user]);
 
