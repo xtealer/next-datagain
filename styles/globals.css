@@ -14,6 +14,10 @@ body,
   @apply w-full h-full;
 }
 
+body {
+  overflow-y: auto;
+}
+
 #__next > div {
   @apply w-full h-full;
 }

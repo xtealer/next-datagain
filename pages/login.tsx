@@ -143,13 +143,11 @@ const LoginPage: NextPageWithLayout = () => {
 
                   <Spacer y={0.5} />
 
-                  <Link href="/recovery" passHref>
-                    <a>
-                      <Button className="w-full" color="warning" bordered>
-                        Help? Account Recovery
-                      </Button>
-                    </a>
-                  </Link>
+                  <Button className="w-full" color="warning" bordered>
+                    <Link href="/recovery" passHref>
+                      <a className="h-full w-full">Help? Account Recovery</a>
+                    </Link>
+                  </Button>
                 </form>
               </div>
             </div>

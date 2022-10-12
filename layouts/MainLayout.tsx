@@ -45,7 +45,9 @@ const MainLayout: FC<MainLayoutProps> = ({ children }) => {
           <NextUILink onClick={doLogout}>Logout</NextUILink>
         </Navbar.Collapse>
       </Navbar>
-      <div className="flex-1 flex flex-col w-full">{children}</div>
+      <div className="flex-1 flex flex-col w-full overflow-auto">
+        {children}
+      </div>
     </div>
   );
 };

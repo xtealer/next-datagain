@@ -10,19 +10,17 @@ const Home: NextPageWithLayout = () => {
   return (
     <BaseContainer>
       <CenterComponent mode="col">
-        <div className="w-full min-h-[400px] max-w-[500px] flex flex-col p-4">
+        <div className="w-full min-h-min max-w-[500px] max-h-[500px] flex-1 flex flex-col p-4 justify-center items-center">
           <ShadowCard>
-            <div className="h-full flex flex-col justify-center">
+            <div className="h-full flex flex-1 flex-col items-center justify-center">
               <BrandHeader />
 
               <div className=" mt-12 p-3 pt-0">
-                <Link href="/login" passHref>
-                  <a>
-                    <Button className="w-full bg-app-green font-bold">
-                      Get Started
-                    </Button>
-                  </a>
-                </Link>
+                <Button className="w-full bg-app-green font-bold">
+                  <Link href="/login">
+                    <a className="h-full w-full">Get Started</a>
+                  </Link>
+                </Button>
               </div>
             </div>
           </ShadowCard>

@@ -87,13 +87,11 @@ const RecoveryPage: NextPageWithLayout = () => {
 
                   <Spacer y={0.5} />
 
-                  <Link href="/login" passHref>
-                    <a>
-                      <Button className="w-full" color="warning" bordered>
-                        Go Back
-                      </Button>
-                    </a>
-                  </Link>
+                  <Button className="w-full" color="warning" bordered>
+                    <Link href="/login" passHref>
+                      <a className="w-full h-full">Go Back</a>
+                    </Link>
+                  </Button>
                 </form>
               </div>
             </div>
