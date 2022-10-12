@@ -1,11 +1,13 @@
 /* eslint-disable import/no-anonymous-default-export */
 import { onAuthStateChanged, Unsubscribe, User } from "firebase/auth";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 export default () => {
   const [firebaseUser, setFirebaseUser] = useState<undefined | null | User>(
     undefined
   );
+
+  const windowTypeMemo = useMemo(() => typeof window, []);
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -27,7 +29,7 @@ export default () => {
     return () => {
       unsubscribe?.();
     };
-  }, []);
+  }, [windowTypeMemo]);
 
   return firebaseUser;
 };

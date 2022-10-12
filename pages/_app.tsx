@@ -4,8 +4,9 @@ import { NextUIProvider } from "@nextui-org/react";
 import Head from "next/head";
 
 import { AppPropsWithLayout } from "../types/Layout";
-import useEmitAppStartedEvent from "../useEmitAppStartedEvent";
 import { ToastContainer } from "react-toastify";
+import LoadingComponent from "../components/loading/LoadingComponent";
+import AppServices from "../components/AppServices";
 
 const supportedChainIds = [1, 3, 4, 5, 2018, 61, 63, 6, 212];
 const connectors = {
@@ -15,7 +16,6 @@ const connectors = {
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   // Use the layout defined at the page level, if available
   const getLayout = Component.getLayout ?? ((page) => page);
-  useEmitAppStartedEvent();
 
   return (
     // @ts-ignore
@@ -29,11 +29,13 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
           content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
         />
       </Head>
-
-      <NextUIProvider>
-        {getLayout(<Component {...pageProps} />)}
-        <ToastContainer />
-      </NextUIProvider>
+      <AppServices>
+        <NextUIProvider>
+          {getLayout(<Component {...pageProps} />)}
+          <LoadingComponent />
+          <ToastContainer />
+        </NextUIProvider>
+      </AppServices>
     </ThirdwebWeb3Provider>
   );
 }
